@@ -21,3 +21,4 @@ Here is the list of changes made in this update:
 
 The bot has a Git repository now! (aka the one you're viewing rn)
 
+### [Download it now!](https://www.mediafire.com/?dcpu01ze87jkhys)
