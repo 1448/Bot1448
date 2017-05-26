@@ -444,15 +444,16 @@ namespace _1448_Bot
         {
             try
             {
-                #region Check if user wants auto-updater
+                #region Check if the user really wants an auto-updater
                 if (!File.Exists(Application.StartupPath + "\\config\\UPDATEINFO"))
                 {
-                    File.Create(Application.StartupPath + "\\config\\UPDATEINFO");
                     if (MessageBox.Show("Do you want the bot to automatically check for updates?", "Bot1448 > Update", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.No)
                     {
                         
                         File.WriteAllText(Application.StartupPath + "\\config\\UPDATEINFO", "do not update");
                     }
+                    else
+                        File.Create(Application.StartupPath + "\\config\\UPDATEINFO").Close();
                 }
                 #endregion
 
@@ -507,10 +508,11 @@ namespace _1448_Bot
                     {
                         ShowError("Your installer is not up to date. The bot will have to update the installer now. Sorry for the inconvenience.");
                         var wc = new WebClient();
-                        wc.DownloadFileAsync(new Uri("http://1448.co.nf/ee/installer.bin"), Application.StartupPath + "\\update.exe");
+                        wc.DownloadFileAsync(new Uri("http://1448.co.nf/ee/installer.bin"), Application.StartupPath + "\\update.bin");
                         wc.DownloadFileCompleted += (s, e) =>
                         {
                             wc.Dispose();
+                            File.Move(Application.StartupPath + "\\update.bin", Application.StartupPath + "\\update.exe");
                             File.Create(Application.StartupPath + "\\config\\installer");
                             ShowInfo("Successfully updated installer.");
                         };
@@ -700,16 +702,13 @@ namespace _1448_Bot
                         foreach (var pos in chunk.Locations)
                             RoomData[chunk.Layer, pos.X, pos.Y] = chunk.Type;
 
-                    if (e.GetBoolean(15) && e.GetBoolean(14))
+                    if (e.GetBoolean(14))
                     {
-                        isOwner = true;
+                        if (e.GetBoolean(15)) isOwner = true;
                         canEdit = true;
                     }
-                    else
-                    {
-                        canEdit = false;
-                    }
-                    //15owner, 14edit
+                    else canEdit = false;
+
                     break;
                 #endregion
 
@@ -941,11 +940,11 @@ namespace _1448_Bot
                                 }
                                 else
                                 {
-                                    Say("Basic commands: dice, ignoresnake, download, comment, comments, botinfo, report, fill, adminhelp", e, 0);
+                                    Say("Basic commands: dice, ignoresnake, download, comment, comments, botinfo, report", e, 0);
                                     Async(() =>
                                     {
                                         W8(1000);
-                                        Say("Use !help <command> on more information on that command.", e, 0);
+                                        Say("Use !help <command> for more information on that command.", e, 0);
                                     });
                                 }
                                 break;
@@ -982,8 +981,12 @@ namespace _1448_Bot
                                     {
                                         if (full[1].ToLower().Trim() != Players[e.GetInt(0)] && full[1].ToLower() != botOwner)
                                         {
-                                            conn.Send("say", "/kick " + e.GetString(1).Substring(6).ToLower());
-
+                                            conn.Send("say", "/kick " + e.GetString(1).Substring(6).ToLower() + " (lol)");
+                                            Async(() =>
+                                            {
+                                                W8(1000);
+                                                conn.Send("say", "/forgive " + full[1]);
+                                            });
                                         }
                                         else
                                         {
@@ -1353,11 +1356,11 @@ namespace _1448_Bot
                             case "adminhelp":
                                 if (lstAdmin.Items.Contains(Players[e.GetInt(0)]) || Players[e.GetInt(0)] == botOwner)
                                 {
-                                    Say("Page 1: kick, kill, edit, redit, snake, admin, unadmin, clear, name", e, 0);
+                                    Say("Page 1: adminhelp, kick, kicklol, kill, edit, redit, snake, admin, unadmin, clear, name", e, 0);
                                     Async(() =>
                                     {
                                         W8(1000);
-                                        Say("Page 2: god, ungod, ban, unban, bgcolor, save, load, stalk, unstalk", e, 0);
+                                        Say("Page 2: god, ungod, ban, unban, bgcolor, save, load, stalk, unstalk, fill", e, 0);
                                     });
                                 }
                                 else
