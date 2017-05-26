@@ -14,7 +14,7 @@ Unlike other updates that have been made to this bot, v2.1.0 focuses more on the
 
 Here is the list of changes made in this update:
 - A different fill algorithm (you'll see this change in almost every update now until I perfect it)
-- A new admin command: `.kicklol \<player> \<reason>`. This kicks a player and immediately forgives them.
+- A new admin command: `.kicklol <player> <reason>`. This kicks a player and immediately forgives them.
 - Admins can no longer ban the owner (I should've done this sooner)
 - The bot asks you if you want to enable the auto-updater
 - Update-checking is less buggy
