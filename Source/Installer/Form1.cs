@@ -67,7 +67,7 @@ namespace Installer
                         bw.Write("https://vgy.me/PmNl33.png");
                     }
                 }
-                File.Create(Application.StartupPath + "\\config\\installer");
+                File.Create(Application.StartupPath + "\\Bot1448\\config\\installer");
                 #endregion
 
                 Info("And, we're done!");
